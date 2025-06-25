@@ -3,7 +3,6 @@ Add a basic smoke-test target below.
 """
 
 load("@bazel_skylib//rules:build_test.bzl", "build_test")
-# load("@rules_devicetree//devicetree:defs.bzl", "...")
 
 # Replace with a usage of your rule/macro
 filegroup(name = "empty")
