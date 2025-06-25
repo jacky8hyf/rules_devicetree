@@ -3,7 +3,12 @@ load("@bazel_skylib//rules:common_settings.bzl", "bool_flag")
 load("//devicetree/private:resolved_toolchain.bzl", "resolved_toolchain")
 
 # For stardoc to reference the files
-exports_files(["defs.bzl"])
+exports_files(
+    [
+        "dtb.bzl",
+    ],
+    visibility = ["//docs:__pkg__"],
+)
 
 # This is the target rule authors should put in their "toolchains"
 # attribute in order to get a runtime for the correct platform.
@@ -29,9 +34,10 @@ bool_flag(
 )
 
 bzl_library(
-    name = "defs",
-    srcs = ["defs.bzl"],
+    name = "dtb",
+    srcs = ["dtb.bzl"],
     visibility = ["//visibility:public"],
+    deps = ["//devicetree/private:dtb"],
 )
 
 bzl_library(
