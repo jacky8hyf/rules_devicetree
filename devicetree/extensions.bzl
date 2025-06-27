@@ -10,44 +10,38 @@ names (the latest version will be picked for each name) and can register them as
 effectively overriding the default named toolchain due to toolchain resolution precedence.
 """
 
-load(":repositories.bzl", "devicetree_register_toolchains")
-
-_DEFAULT_NAME = "devicetree"
+load("//devicetree/private:toolchains_repo.bzl", "toolchains_repo")
 
 devicetree_toolchain = tag_class(attrs = {
     "name": attr.string(doc = """\
 Base name for generated repositories, allowing more than one devicetree toolchain to be registered.
 Overriding the default is only permitted in the root module.
-""", default = _DEFAULT_NAME),
-    "devicetree_version": attr.string(doc = "Explicit version of devicetree.", mandatory = True),
+""", mandatory = True),
 })
 
 def _toolchain_extension(module_ctx):
     registrations = {}
     for mod in module_ctx.modules:
         for toolchain in mod.tags.toolchain:
-            if toolchain.name != _DEFAULT_NAME and not mod.is_root:
-                fail("""\
-                Only the root module may override the default name for the devicetree toolchain.
-                This prevents conflicting registrations in the global namespace of external repos.
-                """)
+            if not mod.is_root and not toolchain.name.startswith(mod.name + "_"):
+                fail("Module {module_name} declares devicetree toolchain repository named {repo_name}, but the name must start with {module_name}".format(
+                    module_name = mod.name,
+                    repo_name = toolchain.name,
+                ))
             if toolchain.name not in registrations.keys():
                 registrations[toolchain.name] = []
-            registrations[toolchain.name].append(toolchain.devicetree_version)
-    for name, versions in registrations.items():
-        if len(versions) > 1:
-            # TODO: should be semver-aware, using MVS
-            selected = sorted(versions, reverse = True)[0]
+            registrations[toolchain.name].append(struct(
+                source = mod.name,
+            ))
+    for name, reg_of_name in registrations.items():
+        if len(reg_of_name) > 1:
+            fail("Multiple modules declraed devicetree toolchain repository named {}: {}".format(
+                name,
+                [reg.source for reg in reg_of_name],
+            ))
 
-            # buildifier: disable=print
-            print("NOTE: devicetree toolchain {} has multiple versions {}, selected {}".format(name, versions, selected))
-        else:
-            selected = versions[0]
-
-        devicetree_register_toolchains(
+        toolchains_repo(
             name = name,
-            devicetree_version = selected,
-            register = False,
         )
 
 devicetree = module_extension(
