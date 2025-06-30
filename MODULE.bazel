@@ -39,8 +39,10 @@ bazel_dep(name = "bazel_skylib_gazelle_plugin", version = "1.4.1", dev_dependenc
 bazel_dep(name = "aspect_bazel_lib", version = "1.32.1", dev_dependency = True)
 bazel_dep(name = "buildifier_prebuilt", version = "6.1.2", dev_dependency = True)
 
-devicetree = use_extension("//devicetree:extensions.bzl", "devicetree")
-devicetree.toolchain(name = "rules_devicetree_toolchains")
-use_repo(devicetree, "rules_devicetree_toolchains")
+autodetected_toolchain_repo = use_repo_rule("//devicetree/private:autodetected_toolchain_repo.bzl", "autodetected_toolchain_repo")
 
-register_toolchains("@rules_devicetree_toolchains//:all")
+autodetected_toolchain_repo(
+    name = "autodetected_toolchain",
+)
+
+register_toolchains("@autodetected_toolchain//:all")
