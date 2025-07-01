@@ -1,0 +1,10 @@
+load("@bazel_skylib//rules:build_test.bzl", "build_test")
+
+filegroup(name = "empty")
+
+build_test(
+    name = "tests",
+    targets = [
+        ":empty",
+    ],
+)
