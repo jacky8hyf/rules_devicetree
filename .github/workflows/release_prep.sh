@@ -24,20 +24,4 @@ cat << EOF
 \`\`\`starlark
 bazel_dep(name = "rules_devicetree", version = "${TAG:1}")
 \`\`\`
-
-## Using WORKSPACE
-
-Paste this snippet into your \`WORKSPACE.bazel\` file:
-
-\`\`\`starlark
-load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
-http_archive(
-    name = "rules_devicetree",
-    sha256 = "${SHA}",
-    strip_prefix = "${PREFIX}",
-    url = "https://github.com/bazel-contrib/rules_devicetree/releases/download/${TAG}/${ARCHIVE}",
-)
 EOF
-
-awk 'f;/--SNIP--/{f=1}' e2e/smoke/WORKSPACE.bazel
-echo "\`\`\`"
