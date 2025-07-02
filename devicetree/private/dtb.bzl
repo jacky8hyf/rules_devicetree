@@ -72,6 +72,7 @@ def _dtc(
         include_files,
         generate_symbols,
         out_extension,
+        dtcopts,
         devicetree_toolchain_info):
     """Invokes dtc.
 
@@ -81,6 +82,7 @@ def _dtc(
         include_files: extra inputs to the action
         generate_symbols: whether to generate symbols
         out_extension: extension of output file without the dot
+        dtcopts: list of flags to dtc
         devicetree_toolchain_info: `DevicetreeToolchainInfo` of resolved toolchain
 
     Returns:
@@ -89,6 +91,7 @@ def _dtc(
     out = ctx.actions.declare_file(_get_output_path(ctx.label.name, src, out_extension))
     args = ctx.actions.args()
     args.add_all(devicetree_toolchain_info.default_dtcopts)
+    args.add_all(dtcopts)
 
     if generate_symbols:
         args.add("-@")
@@ -119,6 +122,7 @@ def _dtb_impl(ctx):
         include_files = split_sources.include_files,
         generate_symbols = ctx.attr.symbols,
         out_extension = "dtb",
+        dtcopts = ctx.attr.dtcopts,
         devicetree_toolchain_info = devicetree_toolchain_info,
     )
     return [
@@ -144,6 +148,7 @@ dtb = rule(
 
             This is necessary if you are applying overlays on top of it.
         """),
+        "dtcopts": attr.string_list(doc = "List of flags to dtc."),
     },
     toolchains = [
         "//devicetree:toolchain_type",

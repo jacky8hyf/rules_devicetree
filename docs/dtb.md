@@ -7,7 +7,7 @@ Builds device tree blobs.
 ## dtb
 
 <pre>
-dtb(<a href="#dtb-name">name</a>, <a href="#dtb-srcs">srcs</a>, <a href="#dtb-symbols">symbols</a>)
+dtb(<a href="#dtb-name">name</a>, <a href="#dtb-dtcopts">dtcopts</a>, <a href="#dtb-srcs">srcs</a>, <a href="#dtb-symbols">symbols</a>)
 </pre>
 
 Build a base devicetree blob (DTB)
@@ -18,6 +18,7 @@ Build a base devicetree blob (DTB)
 | Name  | Description | Type | Mandatory | Default |
 | :------------- | :------------- | :------------- | :------------- | :------------- |
 | <a id="dtb-name"></a>name |  A unique name for this target.   | <a href="https://bazel.build/concepts/labels#target-names">Name</a> | required |  |
+| <a id="dtb-dtcopts"></a>dtcopts |  List of flags to dtc.   | List of strings | optional | <code>[]</code> |
 | <a id="dtb-srcs"></a>srcs |  List of sources.<br><br>            There must be exactly one <code>.dts</code> file. Beside the <code>.dts</code> file,             extra include files like <code>.dtsi</code> can be specified.   | <a href="https://bazel.build/concepts/labels">List of labels</a> | optional | <code>[]</code> |
 | <a id="dtb-symbols"></a>symbols |  Enable generation of symbols (-@).<br><br>            This is necessary if you are applying overlays on top of it.   | Boolean | optional | <code>False</code> |
 
