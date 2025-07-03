@@ -6,6 +6,7 @@ load("//devicetree/private:resolved_toolchain.bzl", "resolved_toolchain")
 exports_files(
     [
         "dtb.bzl",
+        "dtbo.bzl",
     ],
     visibility = ["//docs:__pkg__"],
 )
@@ -36,6 +37,13 @@ bool_flag(
 bzl_library(
     name = "dtb",
     srcs = ["dtb.bzl"],
+    visibility = ["//visibility:public"],
+    deps = ["//devicetree/private:dtb"],
+)
+
+bzl_library(
+    name = "dtbo",
+    srcs = ["dtbo.bzl"],
     visibility = ["//visibility:public"],
     deps = ["//devicetree/private:dtb"],
 )

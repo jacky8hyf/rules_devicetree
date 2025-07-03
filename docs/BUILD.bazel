@@ -7,4 +7,9 @@ stardoc_with_diff_test(
     bzl_library_target = "//devicetree:dtb",
 )
 
+stardoc_with_diff_test(
+    name = "dtbo",
+    bzl_library_target = "//devicetree:dtbo",
+)
+
 update_docs(name = "update")
