@@ -16,6 +16,15 @@ API_DOCS = [
 ]
 
 [
+    starlark_doc_extract(
+        name = "{}.doc_extract".format(doc),
+        src = "//devicetree:{}.bzl".format(doc),
+        deps = ["//devicetree:{}".format(doc)],
+    )
+    for doc in API_DOCS
+]
+
+[
     stardoc(
         name = "api/{}".format(doc),
         out = "api/{}-docgen.md".format(doc),
